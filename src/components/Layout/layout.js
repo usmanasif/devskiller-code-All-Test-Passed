@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Navbar } from '../Navbar/navbar';
@@ -10,15 +10,23 @@ import { componentsActions } from '../../store/components';
 
 export const Layout = () => {
   const currentlyEdited = useSelector(state => state.components?.currentlyEdited);
-  const dispatch = useDispatch();  
+  const [lockedPicker, setLockedPicker] = useState(currentlyEdited)
+  const dispatch = useDispatch();
   const onRemoveClick = id => dispatch(componentsActions.removeComponent({id}));
-  const onSubmit = (id, values) => dispatch(componentsActions.updateComponent({id, data: { values }}));
+  const onSubmit = (id, values) => {
+    dispatch(componentsActions.updateComponent({id, data: { values }}))
+    setLockedPicker(false);
+  };
+
+  useEffect(() => {
+    setLockedPicker(currentlyEdited)
+  }, [currentlyEdited])
 
   return   <>
     <Navbar />
     <div className="d-flex">
       <ComponentsPreview />
-      <ComponentsPicker />
+      <ComponentsPicker lockedPicker={currentlyEdited}/>
     </div>
     {currentlyEdited && (
       <EditedComponent

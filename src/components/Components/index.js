@@ -21,3 +21,5 @@ export const AvailableComponents = [
   { layout: 'img', label: 'image', component: Img },
   { layout: 'iframe', label: 'iframe', component: Iframe },
 ];
+
+
